@@ -58,10 +58,10 @@ var record = {
     email: '',
     otdel: '',
     timestamp: '',
-    step:0
+    step: 0
 };
 
-bot.setWebHook(process.env.NOW_URL+`/bot${token}` || process.env.HEROKU_URL+`/bot${token}`).then(() => {
+bot.setWebHook(process.env.NOW_URL + `/bot${token}` || process.env.HEROKU_URL + `/bot${token}`).then(() => {
     console.log('Web hook successfully set');
 }).catch(err => {
     console.log('Web hook error ', err);
@@ -71,7 +71,10 @@ const cashBot = new Map();
 
 bot.onText(/\/start/, (msg) => {
     let chatID = msg.chat.id;
-    cashBot.set(msg.from.id,record);
+    if (cashBot.get(msg.from.id) !== undefined) {
+        cashBot.get(msg.from.id).step = 0;
+    }
+    cashBot.set(msg.from.id, record);
     cashBot.get(msg.from.id).step++;
     bot.sendMessage(
         chatID,
@@ -90,7 +93,7 @@ bot.on('message', (msg) => {
         if (cashBot.get(fromID) !== undefined) {
             cashBot.get(fromID).step = 0;
         }
-        cashBot.set(msg.from.id,record);
+        cashBot.set(msg.from.id, record);
         cashBot.get(fromID).step++;
         bot.sendMessage(
             chatID,
@@ -100,7 +103,7 @@ bot.on('message', (msg) => {
     }
 
     if (cashBot.get(fromID) === undefined && (msg.text !== 'Привет' || msg.text !== 'привет')) {
-        bot.sendMessage(chatID,`Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}, чтобы начать просто отправьте \/start`);
+        bot.sendMessage(chatID, `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}, чтобы начать просто отправьте \/start`);
     }
 
     if (cashBot.get(fromID) !== undefined) {
@@ -131,29 +134,29 @@ bot.on('message', (msg) => {
         if (cashBot.get(fromID).step === 4) {
             cashBot.get(fromID).overview = msg.text;
             cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Укажите Ваш email или если не хотите его указывать, просто отправьте \"-\"',email);
+            bot.sendMessage(chatID, 'Укажите Ваш email или если не хотите его указывать, просто отправьте \"-\"', email);
         } else if (cashBot.get(fromID).step === 5) {
             cashBot.get(fromID).email = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Укажите Ваше ФИО');
         } else {
             cashBot.get(fromID).fio = msg.text;
-            sendDataToGoogle(cashBot.get(fromID),chatID);
+            sendDataToGoogle(cashBot.get(fromID), chatID);
             cashBot.delete(fromID);
         }
     }
 
 });
 
-sendDataToGoogle = (record,chatID) => {
-   record.timestamp = df(new Date(), 'dd.mm.yyyy HH:MM:ss');
+sendDataToGoogle = (record, chatID) => {
+    record.timestamp = df(new Date(), 'dd.mm.yyyy HH:MM:ss');
     doc.useServiceAccountAuth(creds, function (err) {
         doc.getRows(1, function (err, rows) {
             if (rows) {
                 record.ID = Number.parseInt(rows[rows.length - 1].id) + 1;
                 doc.addRow(1, record, (err, row) => {
                     if (row) {
-                        bot.sendMessage(chatID,`Спасибо, Ваше обращение №${df(new Date, 'ddmmyyyy')}-${record.ID} принято`);
+                        bot.sendMessage(chatID, `Спасибо, Ваше обращение №${df(new Date, 'ddmmyyyy')}-${record.ID} принято`);
                     }
                 })
             }
