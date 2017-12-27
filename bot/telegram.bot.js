@@ -87,6 +87,9 @@ bot.on('message', (msg) => {
     }
 
     if (msg.text === 'Привет' || msg.text === 'привет') {
+        if (cashBot.get(fromID) !== undefined) {
+            cashBot.get(fromID).step = 0;
+        }
         cashBot.set(msg.from.id,record);
         cashBot.get(fromID).step++;
         bot.sendMessage(
