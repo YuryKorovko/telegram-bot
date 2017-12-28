@@ -1,10 +1,21 @@
-const TelegramBot = require('node-telegram-bot-api');
+const TelegramBot = require('node-telegram-bot-api'),
+    port = process.env.PORT || 443,
+    // host = '0.0.0.0',  // probably this change is not required
+    externalUrl = process.env.CUSTOM_ENV_VARIABLE || 'https://telegram-orange-bot.herokuapp.com',
+    token = '517410530:AAEvpf2rDtfCfqUEwKrLDhOVHFBc30rZ9DE',
+    bot = new TelegramBot(token, { webHook: { port : port, host : host } });
+
 const df = require('dateformat');
 // replace the value below with the Telegram token you receive from @BotFather
-const token = '517410530:AAEvpf2rDtfCfqUEwKrLDhOVHFBc30rZ9DE';
+// const token = '517410530:AAEvpf2rDtfCfqUEwKrLDhOVHFBc30rZ9DE';
 
 // Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, {polling: true});
+// const bot = new TelegramBot(token, { webHook: { port : port, host : host } });
+bot.setWebHook(externalUrl + ':443/bot' + token).then(() => {
+    console.log('Webhook successfully set')
+}).catch(err => {
+    console.log('Error setting webhook',err);
+});
 const GoogleSpreadsheet = require('google-spreadsheet');
 const creds = require('../client_secret.json');
 
@@ -60,12 +71,6 @@ var record = {
     timestamp: '',
     step: 0
 };
-
-bot.setWebHook(process.env.NOW_URL + `/bot${token}` || process.env.HEROKU_URL + `/bot${token}`).then(() => {
-    console.log('Web hook successfully set');
-}).catch(err => {
-    console.log('Web hook error ', err);
-});
 
 const cashBot = new Map();
 
