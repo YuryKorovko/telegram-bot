@@ -101,6 +101,7 @@ bot.on('message', (msg) => {
         }
         cashBot.set(msg.from.id, record);
         cashBot.get(fromID).step++;
+        console.log(cashBot.get(fromID).step, 'step must me 1');
         bot.sendMessage(
             chatID,
             `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}. Выберете тип обращения.`,
