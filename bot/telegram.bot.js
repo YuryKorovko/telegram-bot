@@ -1,7 +1,3 @@
-const Promise = require('bluebird');
-Promise.config({
-    cancellation: true
-});
 const TelegramBot = require('node-telegram-bot-api');
 const df = require('dateformat');
 // replace the value below with the Telegram token you receive from @BotFather
