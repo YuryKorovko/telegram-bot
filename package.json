@@ -15,6 +15,7 @@
     "dateformat": "^3.0.2",
     "google-spreadsheet": "^2.0.3",
     "node-telegram-bot-api": "^0.30.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "bluebird": "latest"
   }
 }
