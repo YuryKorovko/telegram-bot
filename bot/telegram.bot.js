@@ -11,11 +11,7 @@ const df = require('dateformat');
 
 // Create a bot that uses 'polling' to fetch new updates
 // const bot = new TelegramBot(token, { webHook: { port : port, host : host } });
-bot.setWebHook(externalUrl + ':443/bot' + token).then(() => {
-    console.log('Webhook successfully set')
-}).catch(err => {
-    console.log('Error setting webhook',err);
-});
+bot.setWebHook(externalUrl + ':443/bot' + token);
 const GoogleSpreadsheet = require('google-spreadsheet');
 const creds = require('../client_secret.json');
 
