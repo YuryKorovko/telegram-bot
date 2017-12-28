@@ -2,6 +2,10 @@
 /**
  * Module dependencies.
  */
+const Promise = require('bluebird');
+Promise.config({
+    cancellation: true
+});
 require('node-telegram-bot-api');
 var app = require('../app');
 var debug = require('debug')('telegram-bot:server');
