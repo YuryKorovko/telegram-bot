@@ -2,7 +2,7 @@
 /**
  * Module dependencies.
  */
-
+require('node-telegram-bot-api');
 var app = require('../app');
 var debug = require('debug')('telegram-bot:server');
 var http = require('http');
