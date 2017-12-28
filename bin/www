@@ -2,8 +2,7 @@
 /**
  * Module dependencies.
  */
-const P = require('bluebird');
-const T = require('node-telegram-bot-api');
+process.env["NTBA_FIX_319"] = 1;
 var app = require('../app');
 var debug = require('debug')('telegram-bot:server');
 var http = require('http');
