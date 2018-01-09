@@ -23,6 +23,46 @@ const creds = require('../client_secret.json');
 // Create a document object using the ID of the spreadsheet - obtained from its URL.
 const doc = new GoogleSpreadsheet('15KZYwCEbYPzQmb1xkuFKgRuqRY6s3mBeFRtF2HDoAdw');
 
+const positions = [
+    "Руководитель ОД",
+    "Заметститель руководителя ОД",
+    "Контролёр заявок",
+    "Менеджер по работе с клиентами",
+    "Логист",
+    "Помощник логиста",
+    "Старший кассир",
+    "Кассир",
+    "Старший кладовщик",
+    "Кладовщик",
+    "Водитель",
+    "Бригадир грузчиков",
+    "Страший грузчик",
+    "Распиловщик",
+    "Оператор 1С",
+    "Грузчик"];
+
+const otdels = [
+        "ЛМ СПб Испытателей",
+    "ЛМ МСК Вегас",
+    "ЛМ МСК Новая Рига",
+    "ЛМ Климовск",
+    "ЛМ Тула",
+    "ЛМ Рязань",
+    "ЛМ Кастрома",
+    "ЛМ Ярославль",
+    "ЛМ Ульяновск",
+    "ЛМ Волжский",
+    "ЛМ Пенза",
+    "ЛМ Киров",
+    "ЛМ Барнаул2",
+    "ЛМ Тюмень",
+    "Casto Воронеж",
+    "Casto Пермь",
+    "Твой дом Кротекс",
+    "Твой дом Крокус",
+    "IKEA-Онлайн"
+];
+
 const otdel = {
     "parse_mode": "Markdown",
     "one_time_keyboard": true,
@@ -145,24 +185,23 @@ bot.on('message', (msg) => {
     }
 
     if (cashBot.get(fromID) !== undefined) {
-        if (msg.text === 'Хищение' || msg.text === 'Улучшение' || msg.text === 'Конфликт'
-            || msg.text === 'Потребность в обучении' || msg.text === 'По З/П' && cashBot.get(fromID).step <= 3) {
+        if (msg.text === 'Хищение' || msg.text === 'Жалоба' || msg.text === 'Улучшение' || msg.text === 'Конфликт'
+            || msg.text === 'Предложение улучшений' || msg.text === 'Вопросы по графику работы' || msg.text === 'Карьерный рост'
+            || msg.text === 'Потребность в обучении' || msg.text === 'Вопросы по З/П' && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).type = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Выберете отдел', otdel);
             return;
         }
 
-        if (msg.text === 'Какой-то первый' || msg.text === 'Какой-то второй' || msg.text === 'Не указан' && cashBot.get(fromID).step <= 3) {
+        if (otdels.contains(msg.text)&& cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).otdel = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Выберете должность', position);
             return;
         }
 
-        if (msg.text === 'Руководитель отдела доставки' || msg.text === 'Логист'
-            || msg.text === 'Помощник логиста' || msg.text === 'Старший кассир'
-            || msg.text === 'Кассир' || msg.text === 'Водитель' || msg.text === 'Бригадир грузчиков' || msg.text === 'Грузчик' && cashBot.get(fromID).step <= 3) {
+        if (positions.contains(msg.text) && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).position = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Укажите описание к обращению');
