@@ -15,7 +15,7 @@ const bot = new TelegramBot(token, {webHook: {port: port, host: host}});
 bot.setWebHook(externalUrl + ':443/bot' + token).then(() => {
     console.log(`Webhook set ${externalUrl}`)
 }).catch(err => {
-    console.log('Fail setting webhook',err);
+    console.log('Fail setting webhook', err);
 });
 const GoogleSpreadsheet = require('google-spreadsheet');
 const creds = require('../client_secret.json');
@@ -26,20 +26,50 @@ const doc = new GoogleSpreadsheet('15KZYwCEbYPzQmb1xkuFKgRuqRY6s3mBeFRtF2HDoAdw'
 const otdel = {
     "parse_mode": "Markdown",
     "one_time_keyboard": true,
-    "reply_markup": {"keyboard": [["Не указан"], ["Какой-то первый"], ["Какой-то второй"]]}
+    "reply_markup": {
+        "keyboard": [
+            ["ЛМ СПб Испытателей"],
+            ["ЛМ МСК Вегас"],
+            ["ЛМ МСК Новая Рига"],
+            ["ЛМ Климовск"],
+            ["ЛМ Тула"],
+            ["ЛМ Рязань"],
+            ["ЛМ Кастрома"],
+            ["ЛМ Ярославль"],
+            ["ЛМ Ульяновск"],
+            ["ЛМ Волжский"],
+            ["ЛМ Пенза"],
+            ["ЛМ Киров"],
+            ["ЛМ Барнаул2"],
+            ["ЛМ Тюмень"],
+            ["Casto Воронеж"],
+            ["Casto Пермь"],
+            ["Твой дом Кротекс"],
+            ["Твой дом Крокус"],
+            ["IKEA-Онлайн"]
+        ]
+    }
 };
 const position = {
     "parse_mode": "Markdown",
     "one_time_keyboard": true,
     "reply_markup": {
         "keyboard": [
-            ["Руководитель отдела доставки"],
+            ["Руководитель ОД"],
+            ["Заметститель руководителя ОД"],
+            ["Контролёр заявок"],
+            ["Менеджер по работе с клиентами"],
             ["Логист"],
             ["Помощник логиста"],
             ["Старший кассир"],
             ["Кассир"],
+            ["Старший кладовщик"],
+            ["Кладовщик"],
             ["Водитель"],
             ["Бригадир грузчиков"],
+            ["Страший грузчик"],
+            ["Распиловщик"],
+            ["Оператор 1С"],
             ["Грузчик"]
         ]
     }
@@ -50,7 +80,8 @@ const typesOfClaim = {
     "one_time_keyboard": true,
     "reply_markup": {
         "keyboard": [["Хищение"],
-            ["Улучшение"], ["Конфликт"], ["По З/П"], ["Потребность в обучении"]]
+            ["Жалоба"], ["Конфликт"], ["Вопросы по З/П"], ["Потребность в обучении"],
+            ["Предложение улучшений"], ["Вопросы по графику работы"], ["Карьерный рост"]]
     }
 };
 const email = {
