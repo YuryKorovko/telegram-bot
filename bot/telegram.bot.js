@@ -185,7 +185,6 @@ bot.on('message', (msg) => {
     }
 
     if (cashBot.get(fromID) !== undefined) {
-        console.log(msg.text, 'message text');
         if (msg.text === 'Хищение' || msg.text === 'Жалоба' || msg.text === 'Улучшение' || msg.text === 'Конфликт'
             || msg.text === 'Предложение улучшений' || msg.text === 'Вопросы по графику работы' || msg.text === 'Карьерный рост'
             || msg.text === 'Потребность в обучении' || msg.text === 'Вопросы по З/П' && cashBot.get(fromID).step <= 3) {
@@ -195,14 +194,14 @@ bot.on('message', (msg) => {
             return;
         }
 
-        if (otdels.contains(msg.text) && cashBot.get(fromID).step <= 3) {
+        if (otdels.indexOf(msg.text) > -1 && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).otdel = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Выберете должность', position);
             return;
         }
 
-        if (positions.contains(msg.text) && cashBot.get(fromID).step <= 3) {
+        if (positions.indexOf(msg.text) > -1 && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).position = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Укажите описание к обращению');
