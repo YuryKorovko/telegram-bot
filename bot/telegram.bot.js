@@ -132,6 +132,14 @@ const email = {
     }
 };
 
+const anonim = {
+    "parse_mode": "Markdown",
+    "one_time_keyboard": true,
+    "reply_markup": {
+        "keyboard": [["Анонимно"],["Не анонимно"]]
+    }
+};
+
 var record = {
     ID: '',
     type: '',
@@ -141,28 +149,29 @@ var record = {
     email: '',
     otdel: '',
     timestamp: '',
-    step: 0
+    step: 0,
+    isAnonymous: false
 };
 
 const cashBot = new Map();
 
-bot.onText(/\/start/, (msg) => {
+bot.onText(/\/Привет/, (msg) => {
     let chatID = msg.chat.id;
     if (cashBot.get(msg.from.id) !== undefined) {
         cashBot.get(msg.from.id).step = 0;
     }
     cashBot.set(msg.from.id, record);
-    cashBot.get(msg.from.id).step++;
+    // cashBot.get(msg.from.id).step++;
     bot.sendMessage(
         chatID,
         `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}. Выберете тип обращения.`,
-        typesOfClaim);
+        anonim);
 });
 
 bot.on('message', (msg) => {
     let chatID = msg.chat.id;
     let fromID = msg.from.id;
-    if (msg.text === "/start") {
+    if (msg.text === "/Привет") {
         return;
     }
 
@@ -171,20 +180,40 @@ bot.on('message', (msg) => {
             cashBot.get(fromID).step = 0;
         }
         cashBot.set(msg.from.id, record);
-        cashBot.get(fromID).step++;
         bot.sendMessage(
             chatID,
             `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}. Выберете тип обращения.`,
-            typesOfClaim);
+            anonim);
         return;
     }
 
     if (cashBot.get(fromID) === undefined && (msg.text !== 'Привет' || msg.text !== 'привет')) {
-        bot.sendMessage(chatID, `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}, чтобы начать просто отправьте \/start`);
+        bot.sendMessage(chatID, `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}, чтобы начать просто отправьте \/Привет`);
         return;
     }
 
     if (cashBot.get(fromID) !== undefined) {
+
+        if (msg.text === 'Анонимно' && cashBot.get(fromID).step <= 3) {
+            cashBot.get(fromID).isAnonymous = true;
+            cashBot.get(fromID).step++;
+            bot.sendMessage(
+                chatID,
+                `Выберете тематику обращения.`,
+                typesOfClaim);
+            return;
+        }
+
+        if (msg.text === 'Не анонимно' && cashBot.get(fromID).step <= 3) {
+            cashBot.get(fromID).isAnonymous = false;
+            cashBot.get(fromID).step++;
+            bot.sendMessage(
+                chatID,
+                `Выберете тематику обращения.`,
+                typesOfClaim);
+            return;
+        }
+
         if (msg.text === 'Хищение' || msg.text === 'Жалоба' || msg.text === 'Улучшение' || msg.text === 'Конфликт'
             || msg.text === 'Предложение улучшений' || msg.text === 'Вопросы по графику работы' || msg.text === 'Карьерный рост'
             || msg.text === 'Потребность в обучении' || msg.text === 'Вопросы по З/П' && cashBot.get(fromID).step <= 3) {
@@ -211,11 +240,19 @@ bot.on('message', (msg) => {
         if (cashBot.get(fromID).step === 4) {
             cashBot.get(fromID).overview = msg.text;
             cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Укажите Ваш email или если не хотите его указывать, просто отправьте \"-\"', email);
+            if (cashBot.get(fromID).isAnonymous) {
+                bot.sendMessage(chatID, 'Укажите Ваш email или можете не отправлять', email);
+            } else {
+                bot.sendMessage(chatID, 'Укажите Ваш email');
+            }
         } else if (cashBot.get(fromID).step === 5) {
             cashBot.get(fromID).email = msg.text;
             cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Укажите Ваше ФИО');
+            if (cashBot.get(fromID).isAnonymous) {
+                bot.sendMessage(chatID, 'Укажите Ваше ФИО или можете не отправлять');
+            } else {
+                bot.sendMessage(chatID, 'Укажите Ваше ФИО');
+            }
         } else {
             cashBot.get(fromID).fio = msg.text;
             sendDataToGoogle(cashBot.get(fromID), chatID);
