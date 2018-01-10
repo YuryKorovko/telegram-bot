@@ -188,7 +188,7 @@ bot.on('message', (msg) => {
     }
 
     if (cashBot.get(fromID) === undefined && (msg.text !== 'Привет' || msg.text !== 'привет')) {
-        bot.sendMessage(chatID, `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}, чтобы начать просто отправьте \/Привет`);
+        bot.sendMessage(chatID, `Привет, ${msg.chat.first_name + ' ' + msg.chat.last_name}, чтобы начать просто отправьте \/hello`);
         return;
     }
 
