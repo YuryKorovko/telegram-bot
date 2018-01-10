@@ -155,7 +155,7 @@ var record = {
 
 const cashBot = new Map();
 
-bot.onText(/\/Привет/, (msg) => {
+bot.onText(/\/hello/, (msg) => {
     let chatID = msg.chat.id;
     if (cashBot.get(msg.from.id) !== undefined) {
         cashBot.get(msg.from.id).step = 0;
