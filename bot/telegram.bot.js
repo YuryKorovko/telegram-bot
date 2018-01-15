@@ -24,6 +24,7 @@ const creds = require('../client_secret.json');
 const doc = new GoogleSpreadsheet('15KZYwCEbYPzQmb1xkuFKgRuqRY6s3mBeFRtF2HDoAdw');
 
 const positions = [
+    "Аноним",
     "Руководитель ОД",
     "Заметститель руководителя ОД",
     "Контролёр заявок",
