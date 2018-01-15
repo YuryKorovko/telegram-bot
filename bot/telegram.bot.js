@@ -96,6 +96,7 @@ const position = {
     "reply_markup": {
         "keyboard": [
             ["Руководитель ОД"],
+            ["Аноним"],
             ["Заметститель руководителя ОД"],
             ["Контролёр заявок"],
             ["Менеджер по работе с клиентами"],
@@ -219,11 +220,12 @@ bot.on('message', (msg) => {
             || msg.text === 'Потребность в обучении' || msg.text === 'Вопросы по З/П' && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).type = msg.text;
             cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Выберете отдел', otdel);
+            bot.sendMessage(chatID, 'Укажите отдел');
             return;
         }
 
-        if (otdels.indexOf(msg.text) > -1 && cashBot.get(fromID).step <= 3) {
+        // if (otdels.indexOf(msg.text) > -1 && cashBot.get(fromID).step <= 3) {
+        if (cashBot.get(fromID).step === 2) {
             cashBot.get(fromID).otdel = msg.text;
             cashBot.get(fromID).step++;
             bot.sendMessage(chatID, 'Выберете должность', position);
