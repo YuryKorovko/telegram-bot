@@ -221,7 +221,7 @@ bot.on('message', (msg) => {
             || msg.text === 'Потребность в обучении' || msg.text === 'Вопросы по З/П' && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).type = msg.text;
             cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Укажите отдел');
+            bot.sendMessage(chatID, 'Введите название отдела');
             return;
         }
 
@@ -236,7 +236,7 @@ bot.on('message', (msg) => {
         if (positions.indexOf(msg.text) > -1 && cashBot.get(fromID).step <= 3) {
             cashBot.get(fromID).position = msg.text;
             cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Укажите описание к обращению');
+            bot.sendMessage(chatID, 'Введите описание обращения');
             return;
         }
 
@@ -252,7 +252,7 @@ bot.on('message', (msg) => {
             cashBot.get(fromID).email = msg.text;
             cashBot.get(fromID).step++;
             if (cashBot.get(fromID).isAnonymous) {
-                bot.sendMessage(chatID, 'Укажите Ваше ФИО или можете не отправлять');
+                bot.sendMessage(chatID, 'Укажите Ваше ФИО или \"-\", если не хотите указывать');
             } else {
                 bot.sendMessage(chatID, 'Укажите Ваше ФИО');
             }
