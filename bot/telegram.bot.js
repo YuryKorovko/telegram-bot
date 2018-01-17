@@ -122,8 +122,8 @@ const typesOfClaim = {
     "one_time_keyboard": true,
     "reply_markup": {
         "keyboard": [["Хищение"],
-            ["Жалоба"], ["Конфликт"], ["Вопросы по З/П"], ["Потребность в обучении"],
-            ["Предложение улучшений"], ["Вопросы по графику работы"], ["Карьерный рост"]]
+            ["Жалоба"], ["Конфликт"], ["Потребность в обучении"],
+            ["Предложение улучшений"], ["Вопросы по графику работы"], ["Карьерный рост"], ['Задать другой вопрос']]
     }
 };
 const email = {
@@ -218,10 +218,16 @@ bot.on('message', (msg) => {
 
         if (msg.text === 'Хищение' || msg.text === 'Жалоба' || msg.text === 'Улучшение' || msg.text === 'Конфликт'
             || msg.text === 'Предложение улучшений' || msg.text === 'Вопросы по графику работы' || msg.text === 'Карьерный рост'
-            || msg.text === 'Потребность в обучении' || msg.text === 'Вопросы по З/П' && cashBot.get(fromID).step <= 3) {
-            cashBot.get(fromID).type = msg.text;
-            cashBot.get(fromID).step++;
-            bot.sendMessage(chatID, 'Введите название отдела');
+            || msg.text === 'Потребность в обучении' || msg.text === 'Задать другой вопрос' && cashBot.get(fromID).step <= 3) {
+                if (msg.text === 'Задать другой вопрос') {
+                    // 999 будет означать , что задают другой вопрос
+                    cashBot.get(fromID).step = 999;
+                    bot.sendMessage(chatID, 'Укажите Ваш вопрос');
+                } else {
+                    cashBot.get(fromID).type = msg.text;
+                    cashBot.get(fromID).step++;
+                    bot.sendMessage(chatID, 'Введите название отдела');
+                }
             return;
         }
 
@@ -244,7 +250,7 @@ bot.on('message', (msg) => {
             cashBot.get(fromID).overview = msg.text;
             cashBot.get(fromID).step++;
             if (cashBot.get(fromID).isAnonymous) {
-                bot.sendMessage(chatID, 'Укажите Ваш email или можете не отправлять', email);
+                bot.sendMessage(chatID, 'Укажите Ваш email или \"-\", если не хотите указывать', email);
             } else {
                 bot.sendMessage(chatID, 'Укажите Ваш email');
             }
@@ -256,6 +262,10 @@ bot.on('message', (msg) => {
             } else {
                 bot.sendMessage(chatID, 'Укажите Ваше ФИО');
             }
+        } else if (cashBot.get(fromID).step === 999) {
+            cashBot.get(fromID).type = msg.text;
+            cashBot.get(fromID).step = 2;
+            bot.sendMessage(chatID, 'Введите название отдела');
         } else {
             cashBot.get(fromID).fio = msg.text;
             sendDataToGoogle(cashBot.get(fromID), chatID);
