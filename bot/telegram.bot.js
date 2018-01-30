@@ -9,7 +9,7 @@ const df = require('dateformat');
 const port = process.env.PORT || 443;
 const host = '0.0.0.0';  // probably this change is not required
 const externalUrl = process.env.CUSTOM_ENV_VARIABLE || 'https://telegram-orange-bot.herokuapp.com';
-const token = '517410530:AAEvpf2rDtfCfqUEwKrLDhOVHFBc30rZ9DE';
+const token = '';
 const bot = new TelegramBot(token, {polling: true});
 const ngrok = require('./bot.configuration');
 
