@@ -10,13 +10,17 @@ const port = process.env.PORT || 443;
 const host = '0.0.0.0';  // probably this change is not required
 const externalUrl = process.env.CUSTOM_ENV_VARIABLE || 'https://telegram-orange-bot.herokuapp.com';
 const token = '517410530:AAEvpf2rDtfCfqUEwKrLDhOVHFBc30rZ9DE';
-const bot = new TelegramBot(token, {webHook: {port: port, host: host}});
+const bot = new TelegramBot(token, {polling: true});
+const ngrok = require('./bot.configuration');
 
-bot.setWebHook(externalUrl + ':443/bot' + token).then(() => {
-    console.log(`Webhook set ${externalUrl}`)
-}).catch(err => {
-    console.log('Fail setting webhook', err);
-});
+// ngrok.getPublicUrl().then(publicURL => {
+//     bot.setWebHook(publicURL + '/bot'+token).then(() => {
+//         console.log(`Webhook set ${publicURL}`)
+//     }).catch(err => {
+//         console.log('Fail setting webhook', err);
+//     });
+// });
+
 const GoogleSpreadsheet = require('google-spreadsheet');
 const creds = require('../client_secret.json');
 
@@ -138,7 +142,7 @@ const anonim = {
     "parse_mode": "Markdown",
     "one_time_keyboard": true,
     "reply_markup": {
-        "keyboard": [["Анонимно"],["Не анонимно"]]
+        "keyboard": [["Анонимно"], ["Не анонимно"]]
     }
 };
 
@@ -219,15 +223,15 @@ bot.on('message', (msg) => {
         if (msg.text === 'Хищение' || msg.text === 'Жалоба' || msg.text === 'Улучшение' || msg.text === 'Конфликт'
             || msg.text === 'Предложение улучшений' || msg.text === 'Вопросы по графику работы' || msg.text === 'Карьерный рост'
             || msg.text === 'Потребность в обучении' || msg.text === 'Задать другой вопрос' && cashBot.get(fromID).step <= 3) {
-                if (msg.text === 'Задать другой вопрос') {
-                    // 999 будет означать , что задают другой вопрос
-                    cashBot.get(fromID).step = 999;
-                    bot.sendMessage(chatID, 'Укажите Ваш вопрос');
-                } else {
-                    cashBot.get(fromID).type = msg.text;
-                    cashBot.get(fromID).step++;
-                    bot.sendMessage(chatID, 'Введите название отдела');
-                }
+            if (msg.text === 'Задать другой вопрос') {
+                // 999 будет означать , что задают другой вопрос
+                cashBot.get(fromID).step = 999;
+                bot.sendMessage(chatID, 'Укажите Ваш вопрос');
+            } else {
+                cashBot.get(fromID).type = msg.text;
+                cashBot.get(fromID).step++;
+                bot.sendMessage(chatID, 'Введите название отдела');
+            }
             return;
         }
 
