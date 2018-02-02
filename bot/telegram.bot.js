@@ -21,7 +21,7 @@ const ngrok = require('./bot.configuration');
 //         console.log('Fail setting webhook', err);
 //     });
 // });
-
+const cashBot = new Map();
 const GoogleSpreadsheet = require('google-spreadsheet');
 const creds = require('../client_secret.json');
 
@@ -146,28 +146,14 @@ const anonim = {
         "keyboard": [["Анонимно"], ["Не анонимно"]]
     }
 };
-
-var record = {
-    ID: '',
-    type: '',
-    position: '',
-    overview: '',
-    fio: '',
-    email: '',
-    otdel: '',
-    timestamp: '',
-    step: 0,
-    isAnonymous: false
-};
-
-const cashBot = new Map();
+var Record = require('./record');
 
 bot.onText(/\/hello/, (msg) => {
     let chatID = msg.chat.id;
     if (cashBot.get(msg.from.id) !== undefined) {
         cashBot.get(msg.from.id).step = 0;
     }
-    cashBot.set(msg.from.id, record);
+    cashBot.set(msg.from.id,new Record());
     // cashBot.get(msg.from.id).step++;
     bot.sendMessage(
         chatID,
