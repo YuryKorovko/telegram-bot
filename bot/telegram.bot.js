@@ -25,8 +25,7 @@ const GoogleSpreadsheet = require('google-spreadsheet');
 const creds = require('../client_secret.json');
 
 // Create a document object using the ID of the spreadsheet - obtained from its URL.
-// const doc = new GoogleSpreadsheet('15KZYwCEbYPzQmb1xkuFKgRuqRY6s3mBeFRtF2HDoAdw');
-const doc = new GoogleSpreadsheet('13fLGMjZ-wlydxCeqKVnCjFyQbqdHd-aZuEoS9pOwQ-o');
+const doc = new GoogleSpreadsheet('15KZYwCEbYPzQmb1xkuFKgRuqRY6s3mBeFRtF2HDoAdw');
 
 const positions = [
     "Аноним",
