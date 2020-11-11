@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 
 var app = express();
 var uncaught = require('uncaught');
-const token = '517410530:AAEvpf2rDtfCfqUEwKrLDhOVHFBc30rZ9DE';
+const token = 'your_token';
 
 var bot = require('./bot/telegram.bot');
 var routes = require('./router/router');
